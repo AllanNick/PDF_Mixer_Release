@@ -4,7 +4,7 @@ import os
 from PyPDF2 import PdfMerger
 from time import sleep, time
 import shutil
-#import pyautogui
+import pyautogui
 
 cwd = os.getcwd()
 #files = ['a.txt','b.txt','c.txt','d.txt']
@@ -102,14 +102,18 @@ def queueing(origin_queue):
             print('cleaning...')
             os.remove('combined.pdf')
             processing = 0
-            print('combine should be done, program will exit')
+            print('[INFO][SAVE]combine should be done, program will exit')
 #            pyautogui.hotkey('tab','delete')
 
-            keyboard.press_and_release('tab+delete')
+            pyautogui.keyDown('tab')
+            pyautogui.keyDown('delete')
             sleep(0.1)
+            pyautogui.keyUp('tab')
+            pyautogui.keyUp('delete')
             
-            sleep(10)
-            exit()
+            print('[DONE!]Program finished TAB+Del to exit')
+            sleep(2)
+            
 
     def open_explorer():
         global cwd, files
@@ -127,20 +131,28 @@ def queueing(origin_queue):
 
     def IO_Thrad():
         global processing
+        keyboard.add_hotkey('up',selection_control,args=(-1,))
+        keyboard.add_hotkey('down',selection_control,args=(1,))
+        keyboard.add_hotkey('[',step_control,args=(-1,))
+        keyboard.add_hotkey(']',step_control,args=(1,))
+        keyboard.add_hotkey('x',mark_down)
+        keyboard.add_hotkey('/',exchanger)
+        keyboard.add_hotkey('=',return_value)
+        keyboard.add_hotkey('Enter',save)
+        keyboard.add_hotkey('E',open_explorer)
+        keyboard.add_hotkey('tab+delete',set0)
         while processing == 1:
             print('In thread')
-            keyboard.add_hotkey('up',selection_control,args=(-1,))
-            keyboard.add_hotkey('down',selection_control,args=(1,))
-            keyboard.add_hotkey('[',step_control,args=(-1,))
-            keyboard.add_hotkey(']',step_control,args=(1,))
-            keyboard.add_hotkey('x',mark_down)
-            keyboard.add_hotkey('/',exchanger)
-            keyboard.add_hotkey('=',return_value)
-            keyboard.add_hotkey('Enter',save)
-            keyboard.add_hotkey('E',open_explorer)
+            if processing != 1:
+                break
             keyboard.wait('tab+delete')
             #print(step,selection)
         print('[INFO][Thread]IO_thread closed...')
+
+    def set0():
+        global processing
+        print('[INFO]processing status set to 0')
+        processing = 0
 
     def return_value():
         global files
@@ -216,5 +228,7 @@ import adjust[export''')
 
     draw_frame(step)
     IO_Thrad()
+    print('[INFO][MAIN]Program finished exit in 5sed...')
+    sleep(5)
 
 queueing(files)
