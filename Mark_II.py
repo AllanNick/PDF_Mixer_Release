@@ -1,10 +1,8 @@
-from threading import Thread
 import keyboard
 import os
 from PyPDF2 import PdfMerger
 from time import sleep, time
 import shutil
-import pyautogui
 
 cwd = os.getcwd()
 #files = ['a.txt','b.txt','c.txt','d.txt']
@@ -92,26 +90,22 @@ def queueing(origin_queue):
             for file in files:
                 if file[-4:]  == '.pdf':
                     merger.append(open(file, 'rb'))
-
+            print('[INFO][SAVE]combine should be done, program will exit')
             with open('combined.pdf','wb') as fout:
                 merger.write(fout)
             #copy combined.pdf to timestamp:
             path_timestamp = os.path.join(cwd,timestamp)
             shutil.copy('combined.pdf',path_timestamp)
             #clean dir
-            print('cleaning...')
+            print('[INFO]cleaning...')
             os.remove('combined.pdf')
             processing = 0
-            print('[INFO][SAVE]combine should be done, program will exit')
+            
 #            pyautogui.hotkey('tab','delete')
-
-            pyautogui.keyDown('tab')
-            pyautogui.keyDown('delete')
-            sleep(0.1)
-            pyautogui.keyUp('tab')
-            pyautogui.keyUp('delete')
+            sleep(2)
             
             print('[DONE!]Program finished TAB+Del to exit')
+            
             sleep(2)
             
 
@@ -168,6 +162,14 @@ def queueing(origin_queue):
         nonlocal origin_queue
         print('\033c')
 
+   
+        print('''
+ ____
+|  __\__
+| |     \.
+|_|  PDF Mixer
+  |_____|
+              ''')
         print('PDF Mixer.')
         print('[C]Nick Software 2019-2023')
         print('---------Version:Mk.II_rev3--')
@@ -228,7 +230,7 @@ import adjust[export''')
 
     draw_frame(step)
     IO_Thrad()
-    print('[INFO][MAIN]Program finished exit in 5sed...')
-    sleep(5)
+    print('[INFO][MAIN]Program finished exit in 3sed...')
+    sleep(2)
 
 queueing(files)
